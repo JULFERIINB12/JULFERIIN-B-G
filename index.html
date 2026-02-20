@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JULFERIIN B GLOBAL</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --maroon: #800000;
+      --darkblue: #0b1a5e;
+      --skylight: #4da6ff;
+    }
+    .bg-maroon { background-color: var(--maroon); }
+    .bg-darkblue { background-color: var(--darkblue); }
+    .bg-skylight { background-color: var(--skylight); }
+    .text-maroon { color: var(--maroon); }
+    .text-darkblue { color: var(--darkblue); }
+    .text-skylight { color: var(--skylight); }
+    .border-maroon { border-color: var(--maroon); }
+    
+    /* Smooth transitions for sidebar */
+    .sidebar-transition {
+      transition: transform 0.3s ease-in-out;
+    }
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "react": "https://esm.sh/react@^19.2.4",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/"
+  }
+}
+</script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div id="root"></div>
+</body>
+</html>

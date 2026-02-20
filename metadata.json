@@ -1,0 +1,9 @@
+{
+  "name": "Copy of JULFERIIN B GLOBAL",
+  "description": "Uma plataforma de gestão empresarial multi-ramo com suporte para RH, Actividades, Logística, Mapeamento GPS e integração social.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}
