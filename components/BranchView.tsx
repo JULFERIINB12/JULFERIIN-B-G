@@ -13,6 +13,7 @@ interface BranchViewProps {
 
 const BranchView: React.FC<BranchViewProps> = ({ branch, boxType }) => {
   const [selectedArea, setSelectedArea] = useState<string | null>(null);
+  const [editingPosto, setEditingPosto] = useState<Posto | null>(null);
   const [postos, setPostos] = useState<Posto[]>([]);
   const [activities, setActivities] = useState<Activity[]>([
     { id: '1', title: 'Manutenção de Equipamento', date: '2024-05-20', status: 'Em Curso' },
@@ -21,8 +22,18 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, boxType }) => {
   ]);
 
   const handleAddPosto = (posto: Posto) => {
-    setPostos([...postos, posto]);
+    if (editingPosto) {
+      setPostos(postos.map(p => p.id === posto.id ? posto : p));
+    } else {
+      setPostos([...postos, posto]);
+    }
     setSelectedArea(null);
+    setEditingPosto(null);
+  };
+
+  const handleEditPosto = (posto: Posto) => {
+    setEditingPosto(posto);
+    setSelectedArea('Editar Posto');
   };
 
   const deleteActivity = (id: string) => {
@@ -70,14 +81,23 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, boxType }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {postos.map((p) => (
-          <div key={p.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200 flex items-center gap-4">
-            <img src={p.profilePic || 'https://picsum.photos/100'} className="w-16 h-16 rounded-full object-cover border-2 border-skylight" alt="" />
-            <div>
-              <p className="font-bold text-darkblue">{p.fullName}</p>
-              <p className="text-xs text-gray-500">Posto: {p.number}</p>
-              <p className="text-xs text-gray-400">{p.location}</p>
-              {p.latitude && <p className="text-[10px] text-maroon">Lat: {p.latitude} / Lon: {p.longitude}</p>}
+          <div key={p.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <img src={p.profilePic || 'https://picsum.photos/100'} className="w-16 h-16 rounded-full object-cover border-2 border-skylight" alt="" />
+              <div>
+                <p className="font-bold text-darkblue">{p.fullName}</p>
+                <p className="text-xs text-gray-500">Posto: {p.number}</p>
+                <p className="text-xs text-gray-400">{p.location}</p>
+                {p.latitude && <p className="text-[10px] text-maroon">Lat: {p.latitude} / Lon: {p.longitude}</p>}
+              </div>
             </div>
+            <button 
+              onClick={() => handleEditPosto(p)}
+              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+              title="Editar Posto"
+            >
+              <Edit size={18} />
+            </button>
           </div>
         ))}
         {postos.length === 0 && <p className="col-span-2 text-center text-gray-400 py-10">Nenhum posto registado.</p>}
@@ -155,14 +175,24 @@ const BranchView: React.FC<BranchViewProps> = ({ branch, boxType }) => {
     </div>
   );
 
-  if (selectedArea === 'Novo Posto' || (selectedArea && !boxType)) {
+  if (selectedArea === 'Novo Posto' || selectedArea === 'Editar Posto' || (selectedArea && !boxType)) {
     return (
       <div className="bg-white p-6 rounded-xl shadow-lg border-t-4 border-skylight">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-darkblue">Registo de Perfil: {selectedArea}</h2>
-          <button onClick={() => setSelectedArea(null)} className="text-gray-400 hover:text-maroon">Voltar</button>
+          <h2 className="text-2xl font-bold text-darkblue">
+            {selectedArea === 'Editar Posto' ? `Editar Perfil: ${editingPosto?.fullName}` : `Registo de Perfil: ${selectedArea}`}
+          </h2>
+          <button 
+            onClick={() => {
+              setSelectedArea(null);
+              setEditingPosto(null);
+            }} 
+            className="text-gray-400 hover:text-maroon"
+          >
+            Voltar
+          </button>
         </div>
-        <PostoForm onSave={handleAddPosto} />
+        <PostoForm onSave={handleAddPosto} initialData={editingPosto || undefined} />
       </div>
     );
   }

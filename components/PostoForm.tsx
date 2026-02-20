@@ -9,28 +9,29 @@ import jsQR from 'https://esm.sh/jsqr@1.4.0';
 
 interface PostoFormProps {
   onSave: (posto: Posto) => void;
+  initialData?: Posto;
 }
 
-const PostoForm: React.FC<PostoFormProps> = ({ onSave }) => {
+const PostoForm: React.FC<PostoFormProps> = ({ onSave, initialData }) => {
   const [formData, setFormData] = useState({
-    number: '',
-    location: '',
-    fullName: '',
-    lat: '',
-    lng: ''
+    number: initialData?.number || '',
+    location: initialData?.location || '',
+    fullName: initialData?.fullName || '',
+    lat: initialData?.latitude?.toString() || '',
+    lng: initialData?.longitude?.toString() || ''
   });
 
   const [socialLinks, setSocialLinks] = useState({
-    facebook: '',
-    tiktok: '',
-    instagram: '',
-    youtube: '',
-    twitter: '',
-    linkedin: '',
-    whatsapp: ''
+    facebook: initialData?.socialLinks?.facebook || '',
+    tiktok: initialData?.socialLinks?.tiktok || '',
+    instagram: initialData?.socialLinks?.instagram || '',
+    youtube: initialData?.socialLinks?.youtube || '',
+    twitter: initialData?.socialLinks?.twitter || '',
+    linkedin: initialData?.socialLinks?.linkedin || '',
+    whatsapp: initialData?.socialLinks?.whatsapp || ''
   });
 
-  const [profilePic, setProfilePic] = useState<string>('');
+  const [profilePic, setProfilePic] = useState<string>(initialData?.profilePic || '');
   const [isScanning, setIsScanning] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -164,7 +165,7 @@ const PostoForm: React.FC<PostoFormProps> = ({ onSave }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
-      id: Math.random().toString(36).substr(2, 9),
+      id: initialData?.id || Math.random().toString(36).substr(2, 9),
       number: formData.number,
       location: formData.location,
       fullName: formData.fullName,
